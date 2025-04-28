@@ -1,7 +1,7 @@
 import express, {Express,Request,Response} from "express";
 import {videosRouter} from "./videos/routers/videos.router";
 import {testingRouter} from "./testing/testing.router";
-import {setupSwagger} from "./index";
+import {setupSwagger} from "./core/Swagger/setup-swagger";
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
