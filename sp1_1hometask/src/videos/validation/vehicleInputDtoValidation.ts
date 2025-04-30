@@ -130,7 +130,7 @@ export const validateCreateVideoInputModel = (
             if (!existingResolutions.includes(resolution)){
                 errors.push({
                     "message": 'Invalid availableResolution: ' + resolution,
-                    "field": 'Resolutions'
+                    "field": 'availableResolutions'
                 })
                 break;
             }
