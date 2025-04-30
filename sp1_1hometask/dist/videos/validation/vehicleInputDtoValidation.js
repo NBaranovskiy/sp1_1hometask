@@ -8,18 +8,18 @@ const validateUpdateVideoInputModel = (data) => {
         typeof data.title !== 'string' ||
         data.title.trim().length > 40 ||
         data.title.trim().length < 1) {
-        errors.push({ field: 'title', message: 'Invalid title' });
+        errors.push({ "message": 'Invalid title', "field": 'title' });
     }
     if (!data.author ||
         typeof data.author !== 'string' ||
         data.author.trim().length > 20 ||
         data.author.trim().length < 1) {
-        errors.push({ field: 'author', message: 'Invalid author' });
+        errors.push({ "message": 'Invalid author', "field": 'author' });
     }
     if (!Array.isArray(data.availableResolutions)) {
         errors.push({
-            field: 'availableResolutions',
-            message: 'availableResolutions must be array'
+            "message": 'availableResolutions must be array',
+            "field": 'availableResolutions',
         });
     }
     else if (data.availableResolutions.length) {
@@ -27,15 +27,15 @@ const validateUpdateVideoInputModel = (data) => {
         if (data.availableResolutions.length > existingResolutions.length ||
             data.availableResolutions.length < 1) {
             errors.push({
-                field: 'availableResolutions',
-                message: 'Invalid availableResolutions'
+                "message": 'Invalid availableResolutions',
+                "field": 'availableResolutions',
             });
         }
         for (const resolution of data.availableResolutions) {
             if (!existingResolutions.includes(resolution)) {
                 errors.push({
-                    field: 'Resolutions',
-                    message: 'Invalid availableResolution: ' + resolution
+                    "message": 'Invalid availableResolution: ' + resolution,
+                    "field": 'Resolutions',
                 });
                 break;
             }
@@ -44,8 +44,8 @@ const validateUpdateVideoInputModel = (data) => {
     if (!data.canBeDownloaded ||
         typeof data.canBeDownloaded !== 'boolean') {
         errors.push({
-            field: 'canBeDownloaded',
-            message: 'Invalid canBeDownloaded'
+            "message": 'Invalid canBeDownloaded',
+            "field": 'canBeDownloaded',
         });
     }
     if (data.minAgeRestriction !== null &&
@@ -53,16 +53,16 @@ const validateUpdateVideoInputModel = (data) => {
             data.minAgeRestriction < 1 ||
             data.minAgeRestriction > 18)) {
         errors.push({
-            field: 'minAgeRestriction',
-            message: 'Invalid minAgeRestriction'
+            "message": 'Invalid minAgeRestriction',
+            "field": 'minAgeRestriction',
         });
     }
     if (!data.publicationDate ||
         typeof data.publicationDate !== 'string' ||
         isNaN(new Date(data.publicationDate).getTime())) {
         errors.push({
-            field: 'publicationDate',
-            message: 'Invalid date-time value'
+            "message": 'Invalid date-time value',
+            "field": 'publicationDate',
         });
     }
     return errors;
@@ -74,18 +74,18 @@ const validateCreateVideoInputModel = (data) => {
         typeof data.title !== 'string' ||
         data.title.trim().length > 40 ||
         data.title.trim().length < 1) {
-        errors.push({ field: 'title', message: 'Invalid title' });
+        errors.push({ "message": 'Invalid title', "field": 'title' });
     }
     if (!data.author ||
         typeof data.author !== 'string' ||
         data.author.trim().length > 20 ||
         data.author.trim().length < 1) {
-        errors.push({ field: 'author', message: 'Invalid author' });
+        errors.push({ "message": 'Invalid author', "field": 'author' });
     }
     if (!Array.isArray(data.availableResolutions)) {
         errors.push({
-            field: 'availableResolutions',
-            message: 'availableResolutions must be array'
+            "message": 'availableResolutions must be array',
+            "field": 'availableResolutions',
         });
     }
     else if (data.availableResolutions.length) {
@@ -93,15 +93,15 @@ const validateCreateVideoInputModel = (data) => {
         if (data.availableResolutions.length > existingResolutions.length ||
             data.availableResolutions.length < 1) {
             errors.push({
-                field: 'availableResolutions',
-                message: 'Invalid availableResolutions'
+                "message": 'Invalid availableResolutions',
+                "field": 'availableResolutions'
             });
         }
         for (const resolution of data.availableResolutions) {
             if (!existingResolutions.includes(resolution)) {
                 errors.push({
-                    field: 'Resolutions',
-                    message: 'Invalid availableResolution: ' + resolution
+                    "message": 'Invalid availableResolution: ' + resolution,
+                    "field": 'Resolutions'
                 });
                 break;
             }

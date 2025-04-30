@@ -64,9 +64,8 @@ const swaggerOptions = {
   },
   apis: ['./src/videos/routers/*.ts','./src/testing/*.ts'], // Укажите пути к вашим роутам
 };
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 export const setupSwagger = (app: Express) => {
-  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL }));
+  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };

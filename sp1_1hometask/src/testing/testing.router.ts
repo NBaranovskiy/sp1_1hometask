@@ -23,6 +23,6 @@ export const testingRouter = Router({});
  */
 testingRouter.delete('/all-data', (req: Request, res: Response) => {
   db.videos = [];
-  res.sendStatus(HttpStatus.NoContent);
+  res.sendStatus(204);
 });
 

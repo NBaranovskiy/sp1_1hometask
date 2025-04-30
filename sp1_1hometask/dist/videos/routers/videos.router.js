@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.videosRouter = void 0;
 const express_1 = require("express");
 const vehicleInputDtoValidation_1 = require("../validation/vehicleInputDtoValidation");
-const http_statuses_1 = require("../../core/types/http-statuses");
 const error_utils_1 = require("../../core/utils/error.utils");
 const in_memore_db_1 = require("../../db/in-memore.db");
 exports.videosRouter = (0, express_1.Router)({});
@@ -144,8 +143,8 @@ exports.videosRouter = (0, express_1.Router)({});
  *             field: "id"
  *
  */
-exports.videosRouter.get('', (req, res) => {
-    res.status(200).send(in_memore_db_1.db.videos);
+exports.videosRouter.get('/', (req, res) => {
+    res.status(200).json(in_memore_db_1.db.videos); // Явно указываем Content-Type и формат
 });
 /**
  * @swagger
@@ -163,28 +162,28 @@ exports.videosRouter.get('', (req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Video'
  */
-exports.videosRouter.post('', (req, res) => {
+exports.videosRouter.post('/', (req, res) => {
     const errors = (0, vehicleInputDtoValidation_1.validateCreateVideoInputModel)(req.body);
     if (errors.length > 0) {
-        res.status(http_statuses_1.HttpStatus.BadRequest).send((0, error_utils_1.createErrorMessages)(errors));
+        res.status(400).json({ errorsMessages: errors }); // Правильный формат ошибок
         return;
     }
     ;
     const currentDate = new Date();
     const publicationDate = new Date();
-    publicationDate.setDate(currentDate.getDate() + 1); // +1 день от текущей даты
+    publicationDate.setDate(currentDate.getDate() + 1);
     const newVideo = {
         id: in_memore_db_1.db.videos.length ? in_memore_db_1.db.videos[in_memore_db_1.db.videos.length - 1].id + 1 : 1,
         title: req.body.title,
         author: req.body.author,
-        canBeDownloaded: true,
+        canBeDownloaded: true, // Добавляем дефолтное значение
         minAgeRestriction: null,
         createdAt: currentDate.toISOString(),
         publicationDate: publicationDate.toISOString(),
         availableResolutions: req.body.availableResolutions
     };
     in_memore_db_1.db.videos.push(newVideo);
-    res.status(http_statuses_1.HttpStatus.Created).send(newVideo);
+    res.status(201).json(newVideo); // Исправляем статус на 201
 });
 /**
  * @swagger
@@ -217,11 +216,11 @@ exports.videosRouter.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const video = in_memore_db_1.db.videos.find(v => v.id === id);
     if (!video) {
-        res.status(http_statuses_1.HttpStatus.NotFound).send((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }]));
+        res.status(404).json((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
         return;
     }
     ;
-    res.status(http_statuses_1.HttpStatus.Ok).send(video);
+    res.status(200).json(video);
 });
 /**
  * @swagger
@@ -251,29 +250,28 @@ exports.videosRouter.get('/:id', (req, res) => {
  */
 exports.videosRouter.put('/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const index = in_memore_db_1.db.videos.findIndex(v => v.id === id);
-    if (index === -1) {
-        res.status(http_statuses_1.HttpStatus.NotFound).send((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }]));
+    const video = in_memore_db_1.db.videos.find(v => v.id === id);
+    if (!video) {
+        res.status(404).json({ errorsMessages: [{ field: 'id', message: 'Video not found' }] });
         return;
     }
     ;
     const errors = (0, vehicleInputDtoValidation_1.validateUpdateVideoInputModel)(req.body);
     if (errors.length > 0) {
-        res.status(http_statuses_1.HttpStatus.BadRequest).send((0, error_utils_1.createErrorMessages)(errors));
+        res.status(400).json({ errorsMessages: errors });
         return;
     }
     ;
-    const currentDate = new Date();
-    const publicationDate = new Date();
-    publicationDate.setDate(currentDate.getDate() + 1);
-    const video = in_memore_db_1.db.videos[index];
-    video.title = req.body.title;
-    video.author = req.body.author;
-    video.availableResolutions = req.body.availableResolutions;
-    video.canBeDownloaded = req.body.canBeDownloaded;
-    video.minAgeRestriction = req.body.minAgeRestriction;
-    video.publicationDate = publicationDate.toISOString();
-    res.sendStatus(http_statuses_1.HttpStatus.NoContent);
+    // Обновляем видео
+    Object.assign(video, {
+        title: req.body.title,
+        author: req.body.author,
+        availableResolutions: req.body.availableResolutions,
+        canBeDownloaded: req.body.canBeDownloaded,
+        minAgeRestriction: req.body.minAgeRestriction,
+        publicationDate: req.body.publicationDate || new Date().toISOString()
+    });
+    res.sendStatus(204);
 });
 /**
  * @swagger
@@ -312,15 +310,15 @@ exports.videosRouter.put('/:id', (req, res) => {
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 exports.videosRouter.delete('/:id', (req, res) => {
-    const id = parseInt((req.params.id));
+    const id = parseInt(req.params.id);
     const index = in_memore_db_1.db.videos.findIndex(v => v.id === id);
     if (index === -1) {
-        res.status(http_statuses_1.HttpStatus.NotFound).send((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }]));
+        res.status(404).json((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
         return;
     }
     ;
     in_memore_db_1.db.videos.splice(index, 1);
-    res.sendStatus(http_statuses_1.HttpStatus.NoContent);
+    res.sendStatus(204);
 });
 /**
  * @swagger
