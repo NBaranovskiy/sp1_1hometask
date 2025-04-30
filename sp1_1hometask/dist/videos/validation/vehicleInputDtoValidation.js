@@ -35,7 +35,7 @@ const validateUpdateVideoInputModel = (data) => {
             if (!existingResolutions.includes(resolution)) {
                 errors.push({
                     "message": 'Invalid availableResolution: ' + resolution,
-                    "field": 'availableResolution',
+                    "field": 'availableResolutions',
                 });
                 break;
             }
@@ -85,7 +85,7 @@ const validateCreateVideoInputModel = (data) => {
     if (!Array.isArray(data.availableResolutions)) {
         errors.push({
             "message": 'availableResolutions must be array',
-            "field": 'availableResolutions',
+            "field": 'Resolutions',
         });
     }
     else if (data.availableResolutions.length) {
@@ -94,7 +94,7 @@ const validateCreateVideoInputModel = (data) => {
             data.availableResolutions.length < 1) {
             errors.push({
                 "message": 'Invalid availableResolutions',
-                "field": 'availableResolutions'
+                "field": 'Resolutions'
             });
         }
         for (const resolution of data.availableResolutions) {
