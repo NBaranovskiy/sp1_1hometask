@@ -183,7 +183,7 @@ videosRouter.post('/', (req: Request<{}, {}, CreateVideoInputModel>, res: Respon
     id: db.videos.length ? db.videos[db.videos.length - 1].id + 1 : 1,
     title: req.body.title,
     author: req.body.author,
-    canBeDownloaded: true, // Добавляем дефолтное значение
+    canBeDownloaded: false, // Добавляем дефолтное значение
     minAgeRestriction: null,
     createdAt: currentDate.toISOString(),
     publicationDate: publicationDate.toISOString(),
@@ -226,7 +226,7 @@ videosRouter.get('/:id', (req, res) => {
   const video = db.videos.find(v => v.id === id);
 
   if (!video) {
-    res.status(404).json(createErrorMessages([{ "message": 'Video not found',"field": 'id' }])); // Исправляем на 404
+    res.status(404).json({ "errorsMessages": [{ "message": 'Video not found',"field": 'id' }]}); // Исправляем на 404
     return;
   };
   res.status(200).json(video);
