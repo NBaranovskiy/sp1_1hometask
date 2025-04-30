@@ -280,7 +280,7 @@ videosRouter.put('/:id', (req, res) => {
     availableResolutions: req.body.availableResolutions,
     canBeDownloaded: req.body.canBeDownloaded,
     minAgeRestriction: req.body.minAgeRestriction,
-    publicationDate: req.body.publicationDate || new Date().toISOString()
+    publicationDate: req.body.publicationDate
   });
 
   res.sendStatus(204);
