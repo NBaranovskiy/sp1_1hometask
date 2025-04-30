@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.videosRouter = void 0;
 const express_1 = require("express");
 const vehicleInputDtoValidation_1 = require("../validation/vehicleInputDtoValidation");
-const error_utils_1 = require("../../core/utils/error.utils");
 const in_memore_db_1 = require("../../db/in-memore.db");
 exports.videosRouter = (0, express_1.Router)({});
 /**
@@ -165,7 +164,7 @@ exports.videosRouter.get('/', (req, res) => {
 exports.videosRouter.post('/', (req, res) => {
     const errors = (0, vehicleInputDtoValidation_1.validateCreateVideoInputModel)(req.body);
     if (errors.length > 0) {
-        res.status(400).json({ errorsMessages: errors }); // Правильный формат ошибок
+        res.status(400).json({ "errorsMessages": errors }); // Правильный формат ошибок
         return;
     }
     ;
@@ -176,7 +175,7 @@ exports.videosRouter.post('/', (req, res) => {
         id: in_memore_db_1.db.videos.length ? in_memore_db_1.db.videos[in_memore_db_1.db.videos.length - 1].id + 1 : 1,
         title: req.body.title,
         author: req.body.author,
-        canBeDownloaded: true, // Добавляем дефолтное значение
+        canBeDownloaded: false, // Добавляем дефолтное значение
         minAgeRestriction: null,
         createdAt: currentDate.toISOString(),
         publicationDate: publicationDate.toISOString(),
@@ -216,7 +215,7 @@ exports.videosRouter.get('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const video = in_memore_db_1.db.videos.find(v => v.id === id);
     if (!video) {
-        res.status(404).json((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
+        res.status(404).json({ "errorsMessages": [{ "message": 'Video not found', "field": 'id' }] }); // Исправляем на 404
         return;
     }
     ;
@@ -252,13 +251,13 @@ exports.videosRouter.put('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const video = in_memore_db_1.db.videos.find(v => v.id === id);
     if (!video) {
-        res.status(404).json({ errorsMessages: [{ field: 'id', message: 'Video not found' }] });
+        res.status(404).json({ "errorsMessages": [{ "message": 'Video not found', "field": 'id' }] });
         return;
     }
     ;
     const errors = (0, vehicleInputDtoValidation_1.validateUpdateVideoInputModel)(req.body);
     if (errors.length > 0) {
-        res.status(400).json({ errorsMessages: errors });
+        res.status(400).json({ "errorsMessages": errors });
         return;
     }
     ;
@@ -313,7 +312,7 @@ exports.videosRouter.delete('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const index = in_memore_db_1.db.videos.findIndex(v => v.id === id);
     if (index === -1) {
-        res.status(404).json((0, error_utils_1.createErrorMessages)([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
+        res.status(404).json({ "errorsMessages": [{ "message": 'Video not found', "field": 'id' }] }); // Исправляем на 404
         return;
     }
     ;
