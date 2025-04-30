@@ -171,7 +171,7 @@ videosRouter.post('/', (req: Request<{}, {}, CreateVideoInputModel>, res: Respon
   const errors = validateCreateVideoInputModel(req.body);
 
   if (errors.length > 0) {
-    res.status(400).json({ errorsMessages: errors }); // Правильный формат ошибок
+    res.status(400).json({ "errorsMessages": errors }); // Правильный формат ошибок
     return;
   };
 
@@ -226,7 +226,7 @@ videosRouter.get('/:id', (req, res) => {
   const video = db.videos.find(v => v.id === id);
 
   if (!video) {
-    res.status(404).json(createErrorMessages([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
+    res.status(404).json(createErrorMessages([{ "message": 'Video not found',"field": 'id' }])); // Исправляем на 404
     return;
   };
   res.status(200).json(video);
@@ -263,13 +263,13 @@ videosRouter.put('/:id', (req, res) => {
   const video = db.videos.find(v => v.id === id);
 
   if (!video) {
-    res.status(404).json({ errorsMessages: [{ field: 'id', message: 'Video not found' }]});
+    res.status(404).json({ "errorsMessages": [{ "message": 'Video not found',"field": 'id' }]});
     return;
   };
 
   const errors = validateUpdateVideoInputModel(req.body);
   if (errors.length > 0) {
-    res.status(400).json({ errorsMessages: errors });
+    res.status(400).json({ "errorsMessages": errors });
     return;
   };
 
@@ -328,7 +328,7 @@ videosRouter.delete('/:id', (req, res) => {
   const index = db.videos.findIndex(v => v.id === id);
 
   if (index === -1) {
-    res.status(404).json(createErrorMessages([{ field: 'id', message: 'Video not found' }])); // Исправляем на 404
+    res.status(404).json({ "errorsMessages": [{ "message": 'Video not found',"field": 'id' }]}); // Исправляем на 404
     return;
   };
 
