@@ -112,7 +112,7 @@ export const validateCreateVideoInputModel = (
     if(!Array.isArray(data.availableResolutions)) {
         errors.push({
             "message": 'availableResolutions must be array',
-            "field": 'Resolutions',
+            "field": 'availableResolutions',
         })
     } else if(data.availableResolutions.length) {
         const existingResolutions = Object.values(Resolutions)
@@ -122,7 +122,7 @@ export const validateCreateVideoInputModel = (
         ) {
             errors.push({
                 "message": 'Invalid availableResolutions',
-                "field": 'Resolutions'
+                "field": 'availableResolutions'
             })
         }
 
