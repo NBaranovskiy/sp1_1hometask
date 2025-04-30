@@ -16,7 +16,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'http://sp1-1hometask-y2o3.vercel.app',
+                url: 'https://sp1-1hometask-y2o3.vercel.app/',
                 description: 'Local server',
             },
         ],
